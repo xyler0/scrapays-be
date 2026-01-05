@@ -143,3 +143,7 @@ src/
 │   └── database.module.ts      # TypeORM configuration
 ├── app.module.ts               # Root module
 └── main.ts                     # Application entry
+```
+
+## Deployed API
+- **GraphQL Endpoint**: https://scrapays-be.onrender.com/graphql
