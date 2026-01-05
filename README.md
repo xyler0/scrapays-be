@@ -1,98 +1,145 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Bookshelf API - Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+GraphQL API for managing books with Auth0 authentication.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Tech Stack
 
-## Description
+- **NestJS** - Backend framework
+- **GraphQL** - API layer (Apollo Server)
+- **TypeORM** - Database ORM
+- **SQLite** - Database
+- **Auth0** - Authentication & Authorization
+- **TypeScript** - Language
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Prerequisites
 
-## Project setup
+- Node.js 18+
+- npm
+- Auth0 account
+
+## Setup
+
+### 1. Install Dependencies
 
 ```bash
-$ npm install
+npm install
 ```
 
-## Compile and run the project
+### 2. Configure Auth0
+
+1. Create Auth0 account at https://auth0.com
+2. Create a new API:
+   - Name: `Bookshelf API`
+   - Identifier: `https://bookshelf-api`(AUTH0_AUDIENCE)
+3. Note your Auth0 domain (e.g.,`devxxxxxxxx.us.auth0.com`)
+
+### 3. Environment Variables
+
+```
+
+Edit `.env` with your Auth0 credentials:
+
+```env
+AUTH0_DOMAIN=your-tenant.auth0.com
+AUTH0_AUDIENCE=https://bookshelf-api
+PORT=4000
+FRONTEND_URL=http://localhost:3000
+```
+
+### 4. Run the Application
 
 ```bash
-# development
-$ npm run start
+# Development
+npm run start:dev
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+# Production
+npm run build
+npm run start:prod
 ```
 
-## Run tests
+Server runs on `http://localhost:4000/graphql`
 
-```bash
-# unit tests
-$ npm run test
+## GraphQL Schema
 
-# e2e tests
-$ npm run test:e2e
+### Queries
 
-# test coverage
-$ npm run test:cov
+```graphql
+query GetBooks {
+  books {
+    id
+    name
+    description
+  }
+}
 ```
 
-## Deployment
+### Mutations
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+```graphql
+mutation CreateBook {
+  createBook(name: "Book Title", description: "Book description") {
+    id
+    name
+    description
+  }
+}
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+mutation UpdateBook {
+  updateBook(id: 1, name: "Updated Title", description: "Updated description") {
+    id
+    name
+    description
+  }
+}
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+mutation DeleteBook {
+  deleteBook(id: 1)
+}
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## Authentication
 
-## Resources
+All endpoints require a valid JWT from Auth0.
 
-Check out a few resources that may come in handy when working with NestJS:
+Include the token in the `Authorization` header:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```
+Authorization: Bearer <your-access-token>
+```
 
-## Support
+### Testing with GraphQL Playground
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+1. Get an access token from Auth0
+2. Add to HTTP Headers in playground:
 
-## Stay in touch
+```json
+{
+  "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+}
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Database
 
-## License
+SQLite database file: `db.sqlite`
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+The database is committed to the repository for easy setup. In production, you would use a proper database service.
+
+Tables are auto-created on first run via TypeORM synchronize.
+
+## Project Structure
+
+```
+src/
+├── auth/
+│   ├── auth.module.ts          # Auth module configuration
+│   ├── jwt.strategy.ts         # Auth0 JWT validation
+│   └── gql-auth.guard.ts       # GraphQL auth guard
+├── book/
+│   ├── book.module.ts          # Book module
+│   ├── book.entity.ts          # Book database entity
+│   ├── book.service.ts         # Business logic
+│   └── book.resolver.ts        # GraphQL resolvers
+├── database/
+│   └── database.module.ts      # TypeORM configuration
+├── app.module.ts               # Root module
+└── main.ts                     # Application entry
